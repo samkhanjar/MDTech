@@ -1,4 +1,5 @@
-﻿using MDTechTest.Models;
+﻿using MDTechTest.Classes;
+using MDTechTest.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,8 +24,14 @@ namespace MDTechTest.Controllers
         public IActionResult Calculate([FromBody] PatientModel patients)
         {
             _logger.LogInformation("Calculating number of groups");
-            
-            return Ok();
+
+            var locator = new GroupLocator<int>(1);
+            var groups = locator.LocateGroups(patients.Matrix);
+
+            var response = new Result();
+            response.numberOfGroups = groups.Count;
+
+            return Ok(response);
         }
     }
 }
